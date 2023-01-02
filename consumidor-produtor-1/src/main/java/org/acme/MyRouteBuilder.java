@@ -6,7 +6,7 @@ public class MyRouteBuilder extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        from("amqp:queue:fila1")
+        from("kafka:topic1?")
             .log("Recebendo mensagem: ${body}")
             .to("amqp:queue:fila2")
             ;

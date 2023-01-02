@@ -25,8 +25,8 @@ services:
       - jaeger-all-in-one
   artemis:
       container_name: artemis
-      #image: quay.io/artemiscloud/activemq-artemis-broker:0.1.4
-      image: vromero/activemq-artemis:2.16.0
+      image: quay.io/artemiscloud/activemq-artemis-broker:1.0.11
+      #image: vromero/activemq-artemis:2.16.0
       environment: 
         AMQ_USER: admin
         AMQ_PASSWORD: admin

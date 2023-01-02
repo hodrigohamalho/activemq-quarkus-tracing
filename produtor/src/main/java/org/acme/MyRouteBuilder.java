@@ -1,5 +1,7 @@
 package org.acme;
 
+import java.time.LocalTime;
+
 import javax.ws.rs.core.MediaType;
 
 import org.apache.camel.builder.RouteBuilder;
@@ -12,7 +14,6 @@ public class MyRouteBuilder extends RouteBuilder {
 
 
         from("timer:MeuTimer?period=5000")
-            .setBody(simple("Corpo da mensagem"))
             .to("direct:meuDirect")
             ;
 
@@ -21,9 +22,9 @@ public class MyRouteBuilder extends RouteBuilder {
             ;
 
         from("direct:meuDirect")
-            .setBody(simple("Ola"))
-            .log("Mensagem: ${body}")
-            .to("amqp:queue:fila1")
+            .setBody(simple("Hello World!"))
+            .log("Conteúdo da mensagem: ${body}")
+            .to("kafka:topic1")
             ;
     }
 
