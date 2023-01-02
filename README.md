@@ -28,4 +28,4 @@ Repositório com exemplo de tracing utilizando produtor e consumidores implement
 
 # Exemplo de visualização no Jaeger
 
-![image](https://user-images.githubusercontent.com/14058396/210248870-694e39fd-7445-4687-a4a4-76dbe0dfcb94.png)
+![image](https://user-images.githubusercontent.com/14058396/210264470-a78c0194-b072-4823-b368-83ff5858f73d.png)
