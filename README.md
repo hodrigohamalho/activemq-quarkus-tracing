@@ -9,6 +9,7 @@ Repositório com exemplo de tracing utilizando produtor e consumidores implement
 
 # Env
 
-* Init AMQ e Jaeger
-  
-  ```docker compose up```
+* Init AMQ e Jaeger: ```docker compose up```
+* Artemis Console: ``` http://localhost:8161/console/ ```
+* Jaeger: ```http://localhost:16686/search```  
+
