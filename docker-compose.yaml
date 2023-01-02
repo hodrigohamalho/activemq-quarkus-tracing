@@ -1,0 +1,15 @@
+version: "3.7"
+services:
+  artemis:
+      container_name: artemis
+      #image: quay.io/artemiscloud/activemq-artemis-broker:0.1.4
+      image: vromero/activemq-artemis:2.16.0
+      environment: 
+        AMQ_USER: admin
+        AMQ_PASSWORD: admin
+        ARTEMIS_USERNAME: admin
+        ARTEMIS_PASSWORD: admin
+      ports:
+      - "8161:8161"
+      - "61616:61616"
+      - "5672:5672"
