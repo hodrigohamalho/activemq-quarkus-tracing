@@ -2,9 +2,7 @@ package org.acme;
 
 import javax.ws.rs.core.MediaType;
 
-import org.apache.camel.ExchangePattern;
 import org.apache.camel.builder.RouteBuilder;
-import org.jboss.resteasy.reactive.server.spi.ContentType;
 
 public class MyRouteBuilder extends RouteBuilder {
 
@@ -13,7 +11,7 @@ public class MyRouteBuilder extends RouteBuilder {
     public void configure() throws Exception {
 
 
-        from("timer:MeuTimer?period=2000")
+        from("timer:MeuTimer?period=5000")
             .setBody(simple("Corpo da mensagem"))
             .to("direct:meuDirect")
             ;
