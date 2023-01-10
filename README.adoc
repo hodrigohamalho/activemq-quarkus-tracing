@@ -1,0 +1,58 @@
+= Obversability with Camel Quarkus Artemis and Kafka
+
+Repositório com exemplo de tracing utilizando produtor e consumidores implementados utilizando Quarkus e Camel comunicando-se utilizando ActiveMQ.
+
+== Projects
+
+. order-producer
+Each 3s save order to database and send the message to Kafka `camel-book` topic and `activemq-book` queue in Artemis.
+. consumidor-produtor-1
+Lê as mensagens da `fila1` e envia uma mensagem para `fila2`
+. consumidor-2
+Lê as mensagens da `fila2`
+
+== Pre requirements
+
+. JDK 11+
+. Quarkus CLI
+. Docker
+. AMQ Streams operator installed
+. AMQ Broker operator installed
+. AMQ Grafana operator installed in project poc
+. Elasticsearch Operator (Production)
+. Red Hat OpenShift distributed tracing platform
+
+== Init Env
+
+. Init AMQ e Jaeger: ```docker compose up```
+. Artemis Console: ``` http://localhost:8161/console/ ```
+. Jaeger: ```http://localhost:16686/search```  
+
+== Init apps
+
+. Execute: ```mvn clean compile``` nos projetos `produtor`, `consumidor-produtor-1` e `consumidor-2`
+
+. Execute: ```quarkus dev``` nos projetos `produtor`, `consumidor-produtor-1` e `consumidor-2`
+
+Jaeger sample
+
+![image](https://user-images.githubusercontent.com/14058396/210264470-a78c0194-b072-4823-b368-83ff5858f73d.png)
+
+== Install The Demo Using Ansible
+
+=== Parameters
+
+[options="header"]
+|=======================
+| Parameter      | Example Value                                      | Definition
+| tkn     | sha256~vFanQbthlPKfsaldJT3bdLXIyEkd7ypO_XPygY1DNtQ | access token for a user with cluster-admin privileges
+| server    | https://api.mycluster.opentlc.com:6443             | OpenShift Cluster API URL
+|=======================
+
+=== Deploying the demo
+----
+export tkn=sha256~dnMRt_XTTEdgDmO6fpi423A6as3X46_1XshCPI-zXW4
+export server=https://api.cluster-h9xg5.h9xg5.sandbox72.opentlc.com:6443
+
+ansible-playbook -e token=${tkn} -e server=${server} playbook.yml
+----

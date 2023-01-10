@@ -1,0 +1,72 @@
+# - name: Evaluate Operator Group
+#   k8s:
+#     state: present
+#     api_version: operators.coreos.com/v1
+#     kind: OperatorGroup
+#     definition:
+#       metadata:
+#         name: '{{ namespace }}-operatorgroup'
+#         namespace: '{{ namespace}}'
+#       spec:
+#         targetNamespaces:
+#         - '{{ namespace }}'
+
+# - name: Evaluate AMQ Streams Operator
+#   k8s:
+#     state: present
+#     kind: Subscription
+#     api_version: operators.coreos.com/v1alpha1
+#     definition:
+#       metadata:
+#         name: amq-streams
+#         namespace: '{{ namespace }}'
+#       spec:
+#         channel: stable
+#         installPlanApproval: Automatic
+#         name: amq-streams
+#         source: redhat-operators
+#         sourceNamespace: openshift-marketplace
+#         startingCSV: amqstreams.v2.2.0-3
+
+# - name: Waiting for AMQ Streams operator to install
+#   shell: set -o pipefail && oc get csv -n {{ namespace }} | grep amqstreams
+#   register: install_status
+#   until: "'Succeeded' in install_status.stdout"
+#   retries: 20
+#   delay: 15
+#   args:
+#     executable: /bin/bash
+
+- name: Evaluate Cluster ConfigMap
+  k8s:
+    state: present
+    namespace: '{{ namespace }}'
+    resource_definition: "{{ lookup('file', 'metrics-cm.yml') }}"
+
+- name: Evaluate Cluster Kafka Instance
+  k8s:
+    state: present
+    namespace: '{{ namespace }}'
+    resource_definition: "{{ lookup('template', 'kafka-cluster.yml.j2') }}"
+
+- name: Waiting for Kafka cluster to be ready
+  shell: set -o pipefail && oc get kafka -n {{ namespace }} --server={{ server }} | grep {{ kafka_cluster }}
+  register: install_status
+  until: "'True' in install_status.stdout"
+  retries: 20
+  delay: 15
+  args:
+    executable: /bin/bash
+
+- name: Create topic events in Kafka
+  k8s:
+    state: present
+    namespace: '{{ namespace }}'
+    resource_definition: "{{ lookup('template', 'events-topic.yml.j2') }}"
+
+- name: Install Kafka UI
+  k8s:
+    state: present
+    namespace: '{{ namespace }}'
+    resource_definition: "{{ lookup('template', 'kafka-ui-cluster.yml.j2') }}"
+

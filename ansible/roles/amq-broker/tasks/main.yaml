@@ -1,0 +1,38 @@
+# - name: Evaluate AMQ Broker Operator Group
+#   k8s:
+#     state: present
+#     namespace: '{{ namespace }}'
+#     resource_definition: "{{ lookup('template', 'operator-group.yml.j2') }}"
+
+# - name: Evaluate AMQ Broker Subscription
+#   k8s:
+#     state: present
+#     namespace: '{{ namespace }}'
+#     resource_definition: "{{ lookup('template', 'amq-subscription.yml.j2') }}"
+
+# - name: Wait for AMQ Broker Operator to be Running
+#   k8s_info:
+#     api_version: v1
+#     kind: Pod
+#     namespace: '{{ namespace }}'
+#     label_selectors:
+#       - name = amq-broker-operator
+#       - rht.comp = Broker_AMQ
+#     field_selectors:
+#       - status.phase=Running
+#   register: r_amq_operator_pod
+#   retries: 120
+#   delay: 10
+#   until: r_amq_operator_pod.resources | list | length == 1
+
+- name: Create AMQ Broker instance
+  k8s:
+    state: present
+    namespace: '{{ namespace }}'
+    resource_definition: "{{ lookup('template', 'artemis-cluster.yml.j2') }}"
+
+- name: Create AMQ Broker Queue
+  k8s:
+    state: present
+    namespace: '{{ namespace }}'
+    resource_definition: "{{ lookup('file', 'artemis-queue.yml') }}"

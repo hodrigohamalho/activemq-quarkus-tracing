@@ -1,0 +1,10 @@
+apiVersion: broker.amq.io/v1beta1
+kind: ActiveMQArtemisAddress
+metadata:
+  name: events
+spec:
+  addressName: events
+  queueName: events
+  routingType: anycast
+  removeFromBrokerOnDelete: true
+

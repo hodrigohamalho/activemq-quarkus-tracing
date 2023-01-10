@@ -1,0 +1,44 @@
+- hosts: localhost
+  name: Install AMQ Broker (Artemis) with Monitoring
+  vars:
+    server: https://api.cluster-578cf.578cf.sandbox1078.opentlc.com:6443
+    artemis_cluster: my-source-cluster
+    kafka_cluster: my-source-cluster
+    namespace: poc
+    grafana_user: admin
+    grafana_password: admin
+    insecure_skip_tls_verify: true
+    delete_demo: false
+
+  tasks:
+
+    - name: Define domain
+      set_fact:
+        domain : "{{ server | regex_replace('https://api.') | regex_replace(':6443')   }}"
+    
+    - name: Login as super user with token on OpenShift 4
+      command: "oc login --token={{ token }}  --server={{ server }} --insecure-skip-tls-verify={{ insecure_skip_tls_verify }}"
+      ignore_errors: false
+
+    - name: Create namespace
+      k8s:
+        state: present
+        kind: Project
+        api_version: project.openshift.io/v1
+        definition:
+          metadata:
+            name: "{{ namespace }}"
+
+    - name: Include AMQ Broker
+      include_role:
+        name: amq-broker
+
+    - name: Include AMQ Streams
+      include_role:
+        name: streams
+
+    - name: Include Monitoring
+      include_role:
+        name: monitoring
+    
+    

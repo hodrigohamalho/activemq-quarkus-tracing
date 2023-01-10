@@ -1,0 +1,12 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: amq-broker-dca-service-monitor
+spec:
+  endpoints:
+    - interval: 30s
+      port: console-jolokia
+      scheme: http
+  selector:
+    matchLabels:
+      application: {{ artemis_cluster }}-app

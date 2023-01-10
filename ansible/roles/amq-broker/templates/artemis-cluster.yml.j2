@@ -1,0 +1,42 @@
+apiVersion: broker.amq.io/v1beta1
+kind: ActiveMQArtemis
+metadata:
+  name: '{{ artemis_cluster }}'
+spec:
+  acceptors:
+  - anycastPrefix: jms.queue.
+    multicastPrefix: /topic/
+    name: acceptor
+    port: 5672
+    protocols: amqp,openwire
+  - anycastPrefix: jms.queue.
+    multicastPrefix: /topic/
+    name: mirror
+    port: 5673
+    protocols: amqp
+  addressSettings: {}
+  adminPassword: temporal
+  adminUser: admin
+  console:
+    expose: true
+    sslEnabled: false
+  deploymentPlan:
+    enableMetricsPlugin: true
+    jolokiaAgentEnabled: true
+    managementRBACEnabled: false
+    clustered: true
+    extraMounts: {}
+    image: placeholder
+    journalType: nio
+    livenessProbe: {}
+    messageMigration: true
+    persistenceEnabled: true
+    podSecurity: {}
+    readinessProbe: {}
+    requireLogin: true
+    size: 1
+    storage:
+      size: 2Gi
+  upgrades:
+    enabled: false
+    minor: false

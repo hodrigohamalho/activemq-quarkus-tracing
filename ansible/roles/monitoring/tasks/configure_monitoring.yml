@@ -1,0 +1,64 @@
+- name: Evaluate Artemis Pod Monitor
+  k8s:
+    state: present
+    namespace: '{{ namespace }}'
+    resource_definition: "{{ lookup('template', 'artemis-service-monitor.yml.j2') }}"
+
+- name: Evaluate Strimzi Pod Monitor
+  k8s:
+    state: present
+    namespace: '{{ namespace }}'
+    resource_definition: "{{ lookup('template', 'strimzi_pod_monitor.yml.j2') }}"
+
+- name: Get Grafana ServiceAccount Token
+  k8s_info:
+    kind: Secret
+    name: 'grafana-serviceaccount-token-jmwz2'
+    namespace: '{{ namespace }}'
+    api_version: v1
+  register: r_grafana_secret
+  until:
+    - r_grafana_secret.resources is defined
+  retries: 10
+  delay: 15
+
+- name: Set grafana_token
+  set_fact:
+    grafana_token: '{{ r_grafana_secret.resources[0].data.token | b64decode }}'
+  when:
+    - r_grafana_secret.resources[0].data.token is defined
+
+- name: Evaluate Grafana ServiceAccount permissons
+  k8s:
+    state: present
+    api_version: rbac.authorization.k8s.io/v1
+    kind: ClusterRoleBinding
+    definition:
+      metadata:
+        name: thanos-metric-viewer
+      roleRef:
+        apiGroup: rbac.authorization.k8s.io
+        kind: ClusterRole
+        name: cluster-monitoring-view
+      subjects:
+      - kind: ServiceAccount
+        name: grafana-serviceaccount
+        namespace: '{{ namespace }}'
+
+- name: Evaluate Grafana Datasource
+  k8s:
+    namespace: '{{ namespace }}'
+    state: present
+    resource_definition: "{{ lookup('template', 'grafana-datasource.yml.j2') }}"
+
+- name: Evaluate Artemis Dashboard
+  k8s:
+    state: present
+    namespace: '{{ namespace }}'
+    resource_definition: "{{ lookup('file', 'grafana-artemis-dashboard.yml') }}"
+
+- name: Evaluate Kafka Dashboard
+  k8s:
+    state: present
+    namespace: '{{ namespace }}'
+    resource_definition: "{{ lookup('file', 'grafana_kafka_dashboard.yml') }}"
