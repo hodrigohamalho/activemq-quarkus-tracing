@@ -68,7 +68,7 @@ image::img/amq-console-browse-queues.png[]
 
 Other Open Source tools Kafka-UI
 
-image::kafka-ui-messages.png[]
+image::img/kafka-ui-messages.png[]
 
 == Pre requirements
 
