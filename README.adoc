@@ -20,13 +20,55 @@ Consume messages from `activemq-book` and `camel-book` queue in Artemis.
 
 Consume messages from Kafka and produces in Artemis. 
 
-Tracing with multiple applications.
+== Tracing with multiple applications.
+
+Overall tracing
+
+image::img/tracing.png[]
+
+Tracing detail
 
 image::img/tracing.png[]
 
 Tracing FlameGraph
 
 image::img/flamegraph.png[]
+
+image::img/flamegraph-1.png[]
+
+image::img/flamegraph-2.png[]
+
+Tracing Statistics
+
+image::img/tracing-statistics.png[]
+
+== Monitoring
+
+Grafana collect metrics from prometheus and make it available through dashboards.
+
+AMQ Broker (Artemis) dashboard
+
+image::img/grafana-amq-broker.png[]
+
+AMQ Streams (Strimzi) dashboard
+
+image::img/grafana-strimzi.png[]
+
+== Other toolings
+
+AMQ Console 
+
+image::img/amq-console-broker-diagram.png[]
+
+image::img/amq-console-browse-queues.png[]
+
+image::img/amq-console-browse-queues-detail.png[]
+
+image::img/amq-console-browse-queues.png[]
+
+Other Open Source tools Kafka-UI
+
+image::kafka-ui-messages.png[]
 
 == Pre requirements
 
