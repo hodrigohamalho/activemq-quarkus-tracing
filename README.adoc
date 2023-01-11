@@ -94,6 +94,15 @@ Inside each project:
 
 == Install the demo in Openshift with Ansible
 
+Install the following operators before running the playbooks:
+
+. AMQ Streams Operator
+. AMQ Broker Operator
+. AMQ Grafana Operator
+. Red Hat OpenShift distributed tracing platform
+
+NOTE: I decided to remove Operators logic from the playbooks because it looks to broke whenever there is a new version of a Operator the playbooks starts to fail (It's annoying).
+
 === Parameters
 
 [options="header"]
