@@ -24,7 +24,7 @@ Consume messages from Kafka and produces in Artemis.
 
 Overall tracing
 
-image::img/tracing.png[]
+image::img/tracing-0.png[]
 
 Tracing detail
 
@@ -32,11 +32,11 @@ image::img/tracing.png[]
 
 Tracing FlameGraph
 
-image::img/flamegraph.png[]
+image::img/tracing-flamegraph.png[]
 
-image::img/flamegraph-1.png[]
+image::img/tracing-flamegraph-1.png[]
 
-image::img/flamegraph-2.png[]
+image::img/tracing-flamegraph-2.png[]
 
 Tracing Statistics
 
