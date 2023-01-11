@@ -1,44 +1,56 @@
 = Obversability with Camel Quarkus Artemis and Kafka
 
-Repositório com exemplo de tracing utilizando produtor e consumidores implementados utilizando Quarkus e Camel comunicando-se utilizando ActiveMQ.
+This project aims to use Apache Camel to send and consume events from Kafka (Strimzi) and Artemis message broker, capture the tracing information and display it in Jaeger. 
 
-== Projects
+Also it has monitoring dashboard for Strimzi and Artemis.
+
+Component architecture:
+
+image::architecture.jpg[]
 
 . order-producer
-Each 3s save order to database and send the message to Kafka `camel-book` topic and `activemq-book` queue in Artemis.
-. consumidor-produtor-1
-Lê as mensagens da `fila1` e envia uma mensagem para `fila2`
-. consumidor-2
-Lê as mensagens da `fila2`
+
+Each 3s save order to a MYSQL database and send the message to Kafka `camel-book`,  `activemq-book` topic and `activemq-book` and `camel-book` queue in Artemis.
+
+. order-artemis-consumer
+
+Consume messages from `activemq-book` and `camel-book` queue in Artemis. 
+
+. order-consumer-producer
+
+Consume messages from Kafka and produces in Artemis. 
+
+Tracing with multiple applications.
+
+image::tracing.png[]
+
+Tracing FlameGraph
+
+image::flamegraph.png[]
 
 == Pre requirements
 
 . JDK 11+
 . Quarkus CLI
 . Docker
-. AMQ Streams operator installed
-. AMQ Broker operator installed
-. AMQ Grafana operator installed in project poc
-. Elasticsearch Operator (Production)
+. AMQ Streams Operator
+. AMQ Broker Operator
+. AMQ Grafana Operator
 . Red Hat OpenShift distributed tracing platform
 
-== Init Env
+== Local development
 
-. Init AMQ e Jaeger: ```docker compose up```
+. Init AMQ, Jaeger: `docker compose up`
 . Artemis Console: ``` http://localhost:8161/console/ ```
-. Jaeger: ```http://localhost:16686/search```  
+. Jaeger Console: ```http://localhost:16686/search```  
 
-== Init apps
+To run the apps: 
 
-. Execute: ```mvn clean compile``` nos projetos `produtor`, `consumidor-produtor-1` e `consumidor-2`
+Inside each project:
 
-. Execute: ```quarkus dev``` nos projetos `produtor`, `consumidor-produtor-1` e `consumidor-2`
+    quarkus dev
 
-Jaeger sample
-
-![image](https://user-images.githubusercontent.com/14058396/210264470-a78c0194-b072-4823-b368-83ff5858f73d.png)
-
-== Install The Demo Using Ansible
+== Install the demo in Openshift with Ansible
 
 === Parameters
 

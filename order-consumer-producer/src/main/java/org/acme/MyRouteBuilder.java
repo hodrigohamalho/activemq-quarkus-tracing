@@ -11,6 +11,10 @@ public class MyRouteBuilder extends RouteBuilder {
             .log("Recebendo mensagem: ${body}")
             .to("amqp:queue:book-stats");
 
+        from("kafka:activemq-book")
+            .log("Recebendo mensagem: ${body}")
+            .to("amqp:queue:book-stats");
+
     }
     
 }

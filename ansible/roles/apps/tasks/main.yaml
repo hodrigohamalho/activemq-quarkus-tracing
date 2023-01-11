@@ -1,0 +1,23 @@
+- name: Create MYSQL Database
+  k8s:
+    state: present
+    namespace: '{{ namespace }}'
+    resource_definition: "{{ lookup('file', 'mysql.yml') }}"
+
+- name: Create Order Producer Application
+  k8s:
+    state: present
+    namespace: '{{ namespace }}'
+    resource_definition: "{{ lookup('file', 'order-producer.yml') }}"
+
+- name: Create Order Consumer Application
+  k8s:
+    state: present
+    namespace: '{{ namespace }}'
+    resource_definition: "{{ lookup('file', 'order-consumer.yml') }}"
+
+- name: Create Order Producer and Consumer Application
+  k8s:
+    state: present
+    namespace: '{{ namespace }}'
+    resource_definition: "{{ lookup('file', 'order-producer-consumer.yml') }}"

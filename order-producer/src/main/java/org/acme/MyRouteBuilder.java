@@ -25,7 +25,7 @@ public class MyRouteBuilder extends RouteBuilder {
                     .log("Processing a camel book")
                     .marshal().json() // convert to JSON
                     .to("kafka:camel-book") // send to KAFKA topic camel-book
-                    .to("amqp:queue:activemq-book") // send to ARTEMIS activemq-book
+                    .to("amqp:queue:camel-book") // send to ARTEMIS activemq-book
                 .otherwise()
                     .log("Processing an activemq book")
                     .marshal().jacksonXml() // convert to XML

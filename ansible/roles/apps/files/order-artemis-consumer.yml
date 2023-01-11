@@ -1,0 +1,65 @@
+﻿kind: Deployment
+apiVersion: apps/v1
+metadata:
+  annotations:
+    alpha.image.policy.openshift.io/resolve-names: '*'
+    app.openshift.io/route-disabled: 'false'
+  name: order-artemis-consumer
+  generation: 2
+  namespace: poc
+  labels:
+    app: order-artemis-consumer
+    app.kubernetes.io/component: order-artemis-consumer
+    app.kubernetes.io/instance: order-artemis-consumer
+    app.kubernetes.io/name: order-artemis-consumer
+    app.kubernetes.io/part-of: activemq-quarkus-tracing
+    app.openshift.io/runtime: camel
+    app.openshift.io/runtime-namespace: poc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order-artemis-consumer
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: order-artemis-consumer
+        deployment: order-artemis-consumer
+      annotations:
+        openshift.io/generated-by: OpenShiftWebConsole
+    spec:
+      containers:
+        - name: order-artemis-consumer
+          image: >-
+            quay.io/hodrigohamalho/activemq-quarkus-tracing:order-artemis-consumer
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+            - containerPort: 8443
+              protocol: TCP
+          env:
+            - name: quarkus.qpid-jms.url
+              value: 'amqp://my-source-cluster-acceptor-0-svc:5672'
+            - name: quarkus.qpid-jms.username
+              value: admin
+            - name: quarkus.qpid-jms.password
+              value: temporal
+            - name: quarkus.opentelemetry.tracer.exporter.otlp.endpoint
+              value: 'http://jaeger-collector:4317'
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600

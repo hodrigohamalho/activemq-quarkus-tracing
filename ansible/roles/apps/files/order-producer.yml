@@ -1,0 +1,66 @@
+﻿kind: Deployment
+apiVersion: apps/v1
+metadata:
+  annotations:
+    alpha.image.policy.openshift.io/resolve-names: '*'
+    app.openshift.io/route-disabled: 'false'
+  name: order-producer
+  labels:
+    app: order-producer
+    app.kubernetes.io/component: order-producer
+    app.kubernetes.io/instance: order-producer
+    app.kubernetes.io/name: order-producer
+    app.kubernetes.io/part-of: activemq-quarkus-tracing
+    app.openshift.io/runtime: camel
+    app.openshift.io/runtime-namespace: poc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order-producer
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: order-producer
+        deployment: order-producer
+      annotations:
+        openshift.io/generated-by: OpenShiftWebConsole
+    spec:
+      containers:
+        - name: order-producer
+          image: >-
+            quay.io/hodrigohamalho/activemq-quarkus-tracing:order-producer
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+            - containerPort: 8443
+              protocol: TCP
+          env:
+            - name: kafka.bootstrap.servers
+              value: 'my-source-cluster-kafka-bootstrap:9092'
+            - name: quarkus.opentelemetry.tracer.exporter.otlp.endpoint
+              value: 'http://jaeger-collector:4317'
+            - name: quarkus.qpid-jms.url
+              value: 'amqp://my-source-cluster-acceptor-0-svc:5672'
+            - name: quarkus.qpid-jms.username
+              value: admin
+            - name: quarkus.qpid-jms.password
+              value: admin
+            - name: camel.component.kafka.brokers
+              value: 'my-source-cluster-kafka-bootstrap.poc.svc:9092'
+            - name: quarkus.datasource.jdbc.url
+              value: 'jdbc:mysql://mysql:3306/sampledb'
+            - name: quarkus.datasource.username
+              value: redhat
+            - name: quarkus.datasource.password
+              value: redhat
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler

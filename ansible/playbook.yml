@@ -41,4 +41,7 @@
       include_role:
         name: monitoring
     
+    - name: Include Applications
+      include_role:
+        name: apps
     
