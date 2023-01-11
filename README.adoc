@@ -6,7 +6,7 @@ Also it has monitoring dashboard for Strimzi and Artemis.
 
 Component architecture:
 
-image::architecture.jpg[]
+image::img/architecture.jpg[]
 
 . order-producer
 
@@ -22,11 +22,11 @@ Consume messages from Kafka and produces in Artemis.
 
 Tracing with multiple applications.
 
-image::tracing.png[]
+image::img/tracing.png[]
 
 Tracing FlameGraph
 
-image::flamegraph.png[]
+image::img/flamegraph.png[]
 
 == Pre requirements
 
