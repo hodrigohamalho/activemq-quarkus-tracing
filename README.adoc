@@ -8,15 +8,15 @@ Component architecture:
 
 image::img/architecture.jpg[]
 
-. order-producer
+* order-producer
 
 Each 3s save order to a MYSQL database and send the message to Kafka `camel-book`,  `activemq-book` topic and `activemq-book` and `camel-book` queue in Artemis.
 
-. order-artemis-consumer
+* order-artemis-consumer
 
 Consume messages from `activemq-book` and `camel-book` queue in Artemis. 
 
-. order-consumer-producer
+* order-consumer-producer
 
 Consume messages from Kafka and produces in Artemis. 
 
