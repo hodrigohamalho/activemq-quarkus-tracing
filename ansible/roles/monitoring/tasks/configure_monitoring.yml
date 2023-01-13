@@ -13,7 +13,7 @@
 - name: Get Grafana ServiceAccount Token
   k8s_info:
     kind: Secret
-    name: 'grafana-serviceaccount-token-jmwz2'
+    name: 'grafana-serviceaccount-token-bp6ms'
     namespace: '{{ namespace }}'
     api_version: v1
   register: r_grafana_secret

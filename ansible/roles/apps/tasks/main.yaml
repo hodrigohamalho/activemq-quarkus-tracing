@@ -10,14 +10,14 @@
     namespace: '{{ namespace }}'
     resource_definition: "{{ lookup('file', 'order-producer.yml') }}"
 
-- name: Create Order Consumer Application
+- name: Create Order Artemis Consumer Application
   k8s:
     state: present
     namespace: '{{ namespace }}'
-    resource_definition: "{{ lookup('file', 'order-consumer.yml') }}"
+    resource_definition: "{{ lookup('file', 'order-artemis-consumer.yml') }}"
 
 - name: Create Order Producer and Consumer Application
   k8s:
     state: present
     namespace: '{{ namespace }}'
-    resource_definition: "{{ lookup('file', 'order-producer-consumer.yml') }}"
+    resource_definition: "{{ lookup('file', 'order-consumer-producer.yml') }}"

@@ -1,0 +1,60 @@
+﻿kind: Deployment
+apiVersion: apps/v1
+metadata:
+  annotations:
+    alpha.image.policy.openshift.io/resolve-names: '*'
+    app.openshift.io/route-disabled: 'false'
+  name: order-consumer-producer
+  labels:
+    app: order-consumer-producer
+    app.kubernetes.io/component: order-consumer-producer
+    app.kubernetes.io/instance: order-consumer-producer
+    app.kubernetes.io/name: order-consumer-producer
+    app.kubernetes.io/part-of: activemq-quarkus-tracing
+    app.openshift.io/runtime: camel
+    app.openshift.io/runtime-namespace: poc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order-consumer-producer
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: order-consumer-producer
+        deployment: order-consumer-producer
+      annotations:
+        openshift.io/generated-by: OpenShiftWebConsole
+    spec:
+      containers:
+        - name: order-consumer-producer
+          image: >-
+            quay.io/hodrigohamalho/activemq-quarkus-tracing:order-consumer-producer
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+            - containerPort: 8443
+              protocol: TCP
+          env:
+            - name: kafka.bootstrap.servers
+              value: 'my-source-cluster-kafka-bootstrap:9092'
+            - name: quarkus.opentelemetry.tracer.exporter.otlp.endpoint
+              value: 'http://jaeger-collector:4317'
+            - name: quarkus.qpid-jms.url
+              value: 'amqp://my-source-cluster-acceptor-0-svc:5672'
+            - name: quarkus.qpid-jms.username
+              value: admin
+            - name: quarkus.qpid-jms.password
+              value: admin
+            - name: camel.component.kafka.brokers
+              value: 'my-source-cluster-kafka-bootstrap.poc.svc:9092'
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
