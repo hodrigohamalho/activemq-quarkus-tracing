@@ -114,8 +114,8 @@ NOTE: I decided to remove Operators logic from the playbooks because it looks to
 
 === Deploying the demo
 ----
-export tkn=sha256~dnMRt_XTTEdgDmO6fpi423A6as3X46_1XshCPI-zXW4
-export server=https://api.cluster-h9xg5.h9xg5.sandbox72.opentlc.com:6443
+export tkn=sha256~x
+export server=https://api.clust2er-6x8wc.6x8wc.sandbox773.opentlc.com:6443
 
 ansible-playbook -e token=${tkn} -e server=${server} playbook.yml
 ----

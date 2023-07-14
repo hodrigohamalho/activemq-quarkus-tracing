@@ -1,12 +1,10 @@
 kind: DeploymentConfig
 apiVersion: apps.openshift.io/v1
 metadata:
-  annotations:
-    template.alpha.openshift.io/wait-for-ready: 'true'
   name: mysql
-  generation: 2
   labels:
-    template: mysql-ephemeral-template
+    app.openshift.io/runtime: mariadb
+    template: mariadb-ephemeral-template
 spec:
   strategy:
     type: Recreate
@@ -19,10 +17,10 @@ spec:
       imageChangeParams:
         automatic: true
         containerNames:
-          - mysql
+          - mariadb
         from:
           kind: ImageStreamTag
-          name: 'mysql:8.0-el8'
+          name: 'mariadb:10.3-el8'
           namespace: openshift
     - type: ConfigChange
   replicas: 1
@@ -30,13 +28,11 @@ spec:
   test: false
   selector:
     name: mysql
-    app: mysql
   template:
     metadata:
       creationTimestamp: null
       labels:
         name: mysql
-        app: mysql
     spec:
       volumes:
         - name: mysql-data
@@ -58,7 +54,7 @@ spec:
             successThreshold: 1
             failureThreshold: 3
           terminationMessagePath: /dev/termination-log
-          name: mysql
+          name: mariadb
           livenessProbe:
             exec:
               command:
@@ -92,9 +88,6 @@ spec:
                 secretKeyRef:
                   name: mysql
                   key: database-name
-          securityContext:
-            capabilities: {}
-            privileged: false
           ports:
             - containerPort: 3306
               protocol: TCP
@@ -103,8 +96,6 @@ spec:
             - name: mysql-data
               mountPath: /var/lib/mysql/data
           terminationMessagePolicy: File
-          image: >-
-            image-registry.openshift-image-registry.svc:5000/openshift/mysql@sha256:5e75fe7ecef8d11cabdb3915887bd81cd481630701fbb9758b867f4db45f841b
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst

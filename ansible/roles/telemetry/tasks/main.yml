@@ -1,0 +1,5 @@
+- name: Create Jaeger
+  k8s:
+    state: present
+    namespace: '{{ namespace }}'
+    resource_definition: "{{ lookup('file', 'jaeger.yml') }}"

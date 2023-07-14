@@ -1,7 +1,7 @@
 - hosts: localhost
   name: Install AMQ Broker (Artemis) with Monitoring
   vars:
-    server: https://api.cluster-578cf.578cf.sandbox1078.opentlc.com:6443
+    server: https://api.cluster-6x8wc.6x8wc.sandbox773.opentlc.com:6443
     artemis_cluster: my-source-cluster
     kafka_cluster: my-source-cluster
     namespace: poc
@@ -29,19 +29,24 @@
           metadata:
             name: "{{ namespace }}"
 
-    - name: Include AMQ Broker
-      include_role:
-        name: amq-broker
+    # - name: Include AMQ Broker
+    #   include_role:
+    #     name: amq-broker
 
-    - name: Include AMQ Streams
-      include_role:
-        name: streams
+    # - name: Include AMQ Streams
+    #   include_role:
+    #     name: streams
 
-    - name: Include Monitoring
-      include_role:
-        name: monitoring
+    # - name: Include Monitoring
+    #   include_role:
+    #     name: monitoring
     
-    - name: Include Applications
+    # - name: Include Applications
+    #   include_role:
+    #     name: apps
+
+    - name: Telemetry
       include_role:
-        name: apps
+        name: telemetry
+
     

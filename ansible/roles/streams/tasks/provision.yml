@@ -49,14 +49,14 @@
     namespace: '{{ namespace }}'
     resource_definition: "{{ lookup('template', 'kafka-cluster.yml.j2') }}"
 
-- name: Waiting for Kafka cluster to be ready
-  shell: set -o pipefail && oc get kafka -n {{ namespace }} --server={{ server }} | grep {{ kafka_cluster }}
-  register: install_status
-  until: "'True' in install_status.stdout"
-  retries: 20
-  delay: 15
-  args:
-    executable: /bin/bash
+# - name: Waiting for Kafka cluster to be ready
+#   shell: set -o pipefail && oc get kafka -n {{ namespace }} --server={{ server }} | grep {{ kafka_cluster }}
+#   register: install_status
+#   until: "'True' in install_status.stdout"
+#   retries: 20
+#   delay: 15
+#   args:
+#     executable: /bin/bash
 
 - name: Create topic events in Kafka
   k8s:
